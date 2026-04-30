@@ -8,7 +8,7 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
     setSearch(e.target.value);
   };
   const getSearchResult = () => {
-    return search === ""
+    return search === "" 
       ? todo
       : todo.filter((it) =>
         it.content.toLowerCase().includes(search.toLowerCase())
