@@ -1,21 +1,23 @@
-import { useState } from "react";
+import { useContext, useMemo, useState } from "react";
+import { TodoStateContext } from "../App";
 import TodoItem from "./TodoItem";
 import "./TodoList.css";
 
-const TodoList = ({ todo, onUpdate, onDelete }) => {
+const TodoList = () => {
+  const todo = useContext(TodoStateContext);
   const [search, setSearch] = useState("");
   const onChangeSearch = (e) => {
     setSearch(e.target.value);
   };
   const getSearchResult = () => {
-    return search === "" 
+    return search === ""
       ? todo
       : todo.filter((it) =>
-        it.content.toLowerCase().includes(search.toLowerCase())
-    );
+          it.content.toLowerCase().includes(search.toLowerCase()),
+        );
   };
-  const analyzeTodo = () => {
-    console.log("analyzeTodo 함수 호출");
+  const analyzeTodo = useMemo(() => {
+    // console.log("analyzeTodo() 함수 호출");
     const totalCount = todo.length;
     const doneCount = todo.filter((it) => it.isDone).length;
     const notDoneCount = totalCount - doneCount;
@@ -24,8 +26,8 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
       doneCount,
       notDoneCount,
     };
-  };
-  const { totalCount, doneCount, notDoneCount } = analyzeTodo();
+  }, [todo]);
+  const { totalCount, doneCount, notDoneCount } = analyzeTodo;
 
   return (
     <div className="TodoList">
@@ -43,7 +45,7 @@ const TodoList = ({ todo, onUpdate, onDelete }) => {
       />
       <div className="list_wrapper">
         {getSearchResult().map((it) => (
-          <TodoItem key={it.id} {...it} onUpdate={onUpdate} onDelete={onDelete}/>
+          <TodoItem key={it.id} {...it} />
         ))}
       </div>
     </div>
